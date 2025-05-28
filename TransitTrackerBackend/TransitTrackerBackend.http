@@ -1,0 +1,6 @@
+@TransitTrackerBackend_HostAddress = http://localhost:5030
+
+GET {{TransitTrackerBackend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

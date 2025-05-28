@@ -1,0 +1,41 @@
+services:
+  reverse-proxy:
+    image: nginx:latest
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - frontend
+      - backend
+    networks:
+      - frontend
+      - backend
+
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    deploy:
+      mode: replicated
+      replicas: 3
+    depends_on:
+      - backend
+    networks:
+      - frontend
+
+  backend:
+    build:
+      context: ./TransitTrackerBackend
+      dockerfile: Dockerfile
+    deploy:
+      mode: replicated
+      replicas: 3
+    networks:
+      - backend
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge
